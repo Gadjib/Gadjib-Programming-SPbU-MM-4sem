@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../PrimeNumbers.Tests/PrimeNumbers.Tests.fsproj" />
+  <Project Path="PrimeNumbers.fsproj" />
+</Solution>
