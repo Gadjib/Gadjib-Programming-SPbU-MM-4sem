@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="LambdaInterpreter.Tests/LambdaInterpreter.Tests.fsproj" />
+  <Project Path="LambdaInterpreter/LambdaInterpreter.fsproj" />
+</Solution>
