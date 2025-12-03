@@ -1,0 +1,83 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{enumitem}
+\setlist{nolistsep}
+\usepackage{amsmath}
+
+\title{Решение задания "Продвинутый лямбда-интерпретатор, грамматика"}
+\author{Андрианов Илья, 23-Б10}
+\begin{document}
+\maketitle
+
+\[
+\begin{aligned}
+\textit{Program} &\longrightarrow \textit{Let}^{*}\ \textit{Expr}\\[2mm]
+\textit{Let} &\longrightarrow \texttt{let}\ \textit{CapitalLetter}\ \texttt{=}\ \textit{Expr}\\[2mm]
+\textit{Expr} &\longrightarrow \textit{Lambda} \mid \textit{App}\\[2mm]
+\textit{Lambda} &\longrightarrow \texttt{\textbackslash}\ \textit{Letter}^{+}\ \texttt{.}\ \textit{Expr}\\[2mm]
+\textit{App} &\longrightarrow \textit{Atom}\ \textit{Atom}^{*}\\[2mm]
+\textit{Atom} &\longrightarrow \textit{Letter} \mid \textit{CapitalLetter} \mid \texttt{(}\ \textit{Expr}\ \texttt{)}\\[2mm]
+\textit{Letter} &\longrightarrow a \mid b \mid ... \mid z\\[2mm]
+\textit{CapitalLetter} &\longrightarrow A \mid B \mid ... \mid Z
+\end{aligned}
+\]
+
+
+\subsection*{Пример 1}
+
+\[
+\begin{aligned}
+\textit{Expr}
+&\Longrightarrow \textit{App}\\
+&\Longrightarrow \textit{Atom}\ \textit{Atom}^{*}\\
+&\Longrightarrow \textit{Atom}\ \textit{Atom}\ \textit{Atom}\\
+&\Longrightarrow \textit{CapitalLetter}\ \textit{CapitalLetter}\ \textit{CapitalLetter}\\
+&\Longrightarrow S\ K\ K
+\end{aligned}
+\]
+
+\subsection*{Пример 2}
+
+\[
+\begin{aligned}
+\textit{Program}
+&\Longrightarrow \textit{Let}^{*}\ \textit{Expr}\\
+&\Longrightarrow \textit{Let}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ \textit{CapitalLetter}\ \texttt{=}\ \textit{Expr}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \textit{Expr}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \textit{Lambda}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ \textit{Letter}^{+}\ \texttt{.}\ \textit{Expr}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ \textit{Expr}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ \textit{App}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ \textit{Atom}\ \textit{Atom}^{*}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ \textit{Atom}\ \textit{Atom}\ \textit{Atom}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ \textit{Letter}\ \textit{Letter}\ \texttt{(}\ \textit{Expr}\ \texttt{)}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ \textit{Letter}\ \texttt{(}\ \textit{Expr}\ \texttt{)}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ \texttt{(}\ \textit{Expr}\ \texttt{)}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ \texttt{(}\ \textit{App}\ \texttt{)}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ \texttt{(}\ \textit{Atom}\ \textit{Atom}\ \texttt{)}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ \texttt{(}\ \textit{Letter}\ \textit{Letter}\ \texttt{)}\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \textit{Let}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ \textit{CapitalLetter}\ \texttt{=}\ \textit{Expr}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \textit{Expr}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \textit{Lambda}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash}\ \textit{Letter}^{+}\ \texttt{.}\ \textit{Expr}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ \texttt{.}\ \textit{Expr}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ \texttt{.}\ \textit{App}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ \texttt{.}\ \textit{Atom}\ \textit{Atom}^{*}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ \texttt{.}\ \textit{Letter}\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ \texttt{.}\ x\ \textit{Expr}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ \texttt{.}\ x\ \textit{App}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ \texttt{.}\ x\ \textit{Atom}\ \textit{Atom}^{*}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ \texttt{.}\ x\ \textit{Atom}\ \textit{Atom}\ \textit{Atom}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ \texttt{.}\ \textit{CapitalLetter}\ \textit{CapitalLetter}\ \textit{CapitalLetter}\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ z\ \texttt{.}\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash}\ x\ y\ \texttt{.}\ x\ S\ K\ K\\
+&\Longrightarrow \texttt{let}\ S\ \texttt{=}\ \texttt{\textbackslash} x\ y\ z.\ x\ z\ (y\ z)\ \texttt{let}\ K\ \texttt{=}\ \texttt{\textbackslash} x\ y.\ x\ S\ K\ K
+\end{aligned}
+\]
+
+
+\end{document}
