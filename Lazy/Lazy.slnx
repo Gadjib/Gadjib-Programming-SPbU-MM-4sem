@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Lazy.Tests/Lazy.Tests.fsproj" />
+  <Project Path="Lazy/Lazy.fsproj" />
+</Solution>
