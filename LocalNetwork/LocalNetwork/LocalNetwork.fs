@@ -30,8 +30,6 @@ type Computer(id : int, os : OperatingSystem, initiallyInfected : bool) =
     member _.Infect() =
         infected <- true
 
-open System
-
 type Network(computers : Computer array, adjacency : bool [,], random : IRandom) =
     member _.Computers = computers
 
